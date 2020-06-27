@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutteryoutubecategorizer/model/category.dart';
-import 'package:flutteryoutubecategorizer/model/channel.dart';
 import 'package:flutteryoutubecategorizer/screen/category_edit_screen.dart';
-import 'package:flutteryoutubecategorizer/screen/channel_search_screen.dart';
 import 'package:flutteryoutubecategorizer/screen/video_list_screen.dart';
 
 class CategoryButton extends StatefulWidget {
   String name;
-  Color color;
   List<String> channelIds;
   Category category;
-  CategoryButton(this.name, this.color, this.channelIds, {this.category});
+  CategoryButton(this.name, this.channelIds, {this.category});
 
   @override
   _CategoryButtonState createState() =>
-      _CategoryButtonState(this.name, this.color, this.channelIds);
+      _CategoryButtonState(this.name, this.channelIds);
 }
 
 class _CategoryButtonState extends State<CategoryButton> {
   String name;
-  Color color;
   List<String> channelIds;
 
-  _CategoryButtonState(this.name, this.color, this.channelIds);
+  _CategoryButtonState(this.name, this.channelIds);
 
   @override
   void initState() {
@@ -31,50 +27,59 @@ class _CategoryButtonState extends State<CategoryButton> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      //onTap: () => {_showCategoryVideos(context)},
-      onTap: () => {
-        Navigator.push(
-          context,
-          /*MaterialPageRoute(
-              builder: (context) =>
-                  VideoListScreen("카테고리: ${widget.name}", widget.channelIds)),*/
-          MaterialPageRoute(
-              builder: (context) => VideoListScreen(widget.category)),
-        )
-      },
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width * 0.4,
-            height: MediaQuery.of(context).size.width * 0.4,
-            child: Center(
-              child: Text(widget.name,
-                  style: TextStyle(fontSize: 20, color: Colors.white)),
-            ),
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                color: Colors.black26,
-                width: 3,
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8, top: 4, bottom: 4),
+      child: InkWell(
+        //onTap: () => {_showCategoryVideos(context)},
+        onTap: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VideoListScreen(widget.category)),
+          )
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 80,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(widget.name,
+                    style: TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.topRight,
-            child: InkWell(
-              onTap: () => {_navigateAndDisplaySelection(context)},
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Icon(
-                  Icons.edit,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: InkWell(
+                  onTap: () => {_navigateAndDisplaySelection(context)},
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Colors.black38),
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
+            ],
+          ),
+          decoration: BoxDecoration(
+            color: Colors.white24,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: Colors.black26,
+              width: 1,
             ),
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

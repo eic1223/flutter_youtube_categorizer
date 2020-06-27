@@ -64,36 +64,51 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          top: 20,
-          right: 20,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomCenter,
+                colors: [Colors.indigoAccent, Colors.pinkAccent])),
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 50,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "CATEGORY",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  children: List.generate(categories.length, (index) {
+                    return CategoryButton(
+                      categories[index].name,
+                      categories[index].getChannelIds(),
+                      category: categories[index],
+                    );
+                  }),
+                ),
+              ),
+              FloatingActionButton(
+                child: Icon(Icons.add),
+                onPressed: () => {_navigateAndDisplaySelection(context)},
+              ),
+            ],
+          ),
         ),
-        child: GridView.count(
-          crossAxisCount: 2,
-          mainAxisSpacing: 20.0,
-          crossAxisSpacing: 20.0,
-          children: List.generate(categories.length, (index) {
-            return CategoryButton(
-              categories[index].name,
-              categories[index].color,
-              categories[index].getChannelIds(),
-              category: categories[index],
-            );
-          }),
-          /*children: [
-            CategoryButton("Japanese Channels", Colors.orange),
-            ListView.builder(
-                itemCount: categories.length,
-                itemBuilder: (_, int index) => listCategory(index)),
-            NewCategoryButton("NEW", Colors.white),
-          ],*/
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => {_navigateAndDisplaySelection(context)},
       ),
     );
   }
@@ -103,8 +118,8 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: EdgeInsets.symmetric(vertical: 7.0),
       child: new Column(
         children: <Widget>[
-          CategoryButton(categories[index].name, categories[index].color,
-              categories[index].getChannelList()),
+          CategoryButton(
+              categories[index].name, categories[index].getChannelList()),
         ],
       ),
     );
