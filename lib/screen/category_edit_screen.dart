@@ -10,11 +10,9 @@ import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
 class CategoryEditScreen extends StatefulWidget {
   String originCategoryName;
-  Color originCategoryColor;
   List<Channel> originChannels;
 
-  CategoryEditScreen(
-      {this.originCategoryName, this.originCategoryColor, this.originChannels});
+  CategoryEditScreen([this.originCategoryName, this.originChannels]);
 
   @override
   _CategoryEditScreenState createState() => _CategoryEditScreenState();
@@ -22,7 +20,6 @@ class CategoryEditScreen extends StatefulWidget {
 
 class _CategoryEditScreenState extends State<CategoryEditScreen> {
   String categoryName = "";
-  Color originCategoryColor = Colors.teal;
   List<Channel> channels = [];
 
   Color swatch;
@@ -54,177 +51,200 @@ class _CategoryEditScreenState extends State<CategoryEditScreen> {
     if (widget.originChannels != null) {
       channels = widget.originChannels;
     }
-
-    swatch = Colors.teal;
   } //
-
-  Row buildSwatchRow(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: 150.0,
-          child: RaisedButton(
-            child: Text("Swatch Picker"),
-            onPressed: () => showMaterialSwatchPicker(
-              context: context,
-              selectedColor: swatch,
-              onChanged: (value) => setState(() => originCategoryColor = value),
-            ),
-          ),
-        ),
-        Expanded(child: Container()),
-        Container(
-          height: 20.0,
-          width: 100.0,
-          decoration: BoxDecoration(
-            color: originCategoryColor,
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          top: 50,
-          right: 20,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () => {
-                    showMaterialSwatchPicker(
-                      context: context,
-                      selectedColor: swatch,
-                      onChanged: (value) =>
-                          setState(() => originCategoryColor = value),
-                    )
-                  },
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    margin: EdgeInsets.only(right: 10),
-                    padding: EdgeInsets.only(left: 10, right: 20),
-                    decoration: new BoxDecoration(
-                        color: originCategoryColor,
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        border: Border.all(width: 2, color: Colors.black12)),
-                  ),
-                ),
-                Flexible(
-                  child: Container(
-                    alignment: Alignment(0.0, 0.0),
-                    height: 60,
-                    margin: EdgeInsets.only(bottom: 10, right: 10),
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        bottom:
-                            BorderSide(width: 1.0, color: Color(0xFFFF7F7F7F)),
-                      ),
-                    ),
-                    child: Row(children: <Widget>[
-                      Flexible(
-                        child: Container(
-                          margin: EdgeInsets.only(right: 20),
-                          child: TextField(
-                            controller: nameController,
-                            onChanged: (text) =>
-                                {categoryName = text.toString()},
-                            style: TextStyle(color: Colors.black, fontSize: 32),
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Category Name',
-                                hintStyle: TextStyle(color: Colors.grey[300])),
-                            cursorColor: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    ]),
-                  ),
-                ),
-                /*Text(
-                  "CATEGORY EDIT",
-                  style: TextStyle(fontSize: 30),
-                ),*/
-                FloatingActionButton(
-                    heroTag: "btn1",
-                    backgroundColor: Colors.green,
-                    child: Icon(
-                      Icons.check,
-                    ),
-                    onPressed: () => {
-                          (categoryName == null || categoryName == "")
-                              ? _showDialogNoName()
-                              : (channels == null || channels.length == 0)
-                                  ? _showDialogNoChannel()
-                                  : Navigator.pop(context, categoryData())
-                        }),
-              ],
-            ),
-            Padding(padding: EdgeInsets.all(4)),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: channels.length,
-                  itemBuilder: (_, int index) => listItem(index)),
-            ),
-            Padding(padding: EdgeInsets.all(10)),
-            Row(
-              children: [
-                Flexible(
-                  child: Container(
-                    alignment: Alignment(0.0, 0.0),
-                    height: 60,
-                    margin: EdgeInsets.only(bottom: 6, right: 10),
-                    padding: EdgeInsets.only(left: 20, right: 10),
-                    decoration: new BoxDecoration(
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomCenter,
+                colors: [Colors.teal, Colors.indigo])),
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.arrow_back,
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        border: Border.all(width: 1, color: Colors.black12)),
-                    child: Row(children: <Widget>[
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "NEW CATEGORY",
+                    style: TextStyle(color: Colors.white, fontSize: 28),
+                  ),
+                ],
+              ),
+              Padding(padding: EdgeInsets.all(8)),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    "CATEGORY NAME",
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 16, right: 16, top: 8, bottom: 8),
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 24),
+                    child: Center(
+                      child: TextField(
+                        controller: nameController,
+                        onChanged: (text) => {categoryName = text.toString()},
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Category Name',
+                            hintStyle: TextStyle(color: Colors.grey)),
+                        cursorColor: Colors.pinkAccent,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(8)),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    "CHANNELS",
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
+                ),
+              ),
+              //Padding(padding: EdgeInsets.all(2)),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
                       Flexible(
                         child: Container(
-                          margin: EdgeInsets.only(right: 20),
-                          child: TextField(
-                            controller: searchController,
-                            onChanged: (text) {
-                              query = text.toString();
-                            },
-                            style: TextStyle(color: Colors.black),
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Search & Add Channel',
-                                hintStyle: TextStyle(color: Colors.grey[500])),
-                            cursorColor: Colors.blue,
+                          height: 50,
+                          decoration: new BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(18)),
+                              border: Border.all(width: 1, color: Colors.grey)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 16.0),
+                            child: Center(
+                              child: TextField(
+                                controller: searchController,
+                                onChanged: (text) {
+                                  query = text.toString();
+                                },
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 18),
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: 'Search & Add Channel',
+                                    hintStyle: TextStyle(color: Colors.grey)),
+                                cursorColor: Colors.blue,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ]),
-                  ),
-                ),
-                FloatingActionButton(
-                    heroTag: "btn2",
-                    backgroundColor: Colors.pinkAccent,
-                    child: Icon(
-                      Icons.search,
-                    ),
-                    onPressed: () => {
+                      InkWell(
+                        onTap: () => {
                           (query == null || query == "")
                               ? _showDialogNoSearchQuery()
                               : _showCategoryVideos(context),
-                        }),
-              ],
-            ),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
-          ],
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Card(
+                            color: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                      color: Colors.white, width: 2)),
+                              width: 50,
+                              height: 50,
+                              child: Icon(
+                                Icons.search,
+                                color: Colors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.all(5)),
+              Expanded(
+                child: ListView.builder(
+                    padding: EdgeInsets.only(left: 16, right: 16),
+                    itemCount: channels.length,
+                    itemBuilder: (_, int index) => listItem(index)),
+              ),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
+              /*Expanded(
+                child: Container(),
+              ),*/
+              Align(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 32, right: 32),
+                  child: InkWell(
+                    onTap: () => {
+                      (categoryName == null || categoryName == "")
+                          ? _showDialogNoName()
+                          : (channels == null || channels.length == 0)
+                              ? _showDialogNoChannel()
+                              : Navigator.pop(context, categoryData())
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 60,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.orangeAccent),
+                      child: Icon(
+                        Icons.check,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -253,53 +273,63 @@ class _CategoryEditScreenState extends State<CategoryEditScreen> {
   //
 
   Widget listItem(index) {
-    return new Card(
+    return Padding(
+      padding: const EdgeInsets.only(top: 4, bottom: 4),
       child: new Container(
-        margin: EdgeInsets.symmetric(vertical: 7.0),
-        padding: EdgeInsets.all(10.0),
-        child: Stack(
-          children: [
-            InkWell(
-              onTap: () => {},
-              child: new Row(
-                children: <Widget>[
-                  new Image.network(
-                    channels[index].thumb,
-                    width: 64,
-                    height: 64,
-                  ),
-                  new Padding(padding: EdgeInsets.only(right: 20.0)),
-                  new Expanded(
-                      child: new Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                        new Text(
-                          channels[index].title,
-                          softWrap: true,
-                          style: TextStyle(fontSize: 18.0),
-                        ),
-                        new Padding(padding: EdgeInsets.only(bottom: 1.5)),
-                        new Text(
-                          channels[index].id,
-                          softWrap: true,
-                        ),
-                      ]))
-                ],
+        width: MediaQuery.of(context).size.width,
+        height: 80,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10), color: Colors.white),
+        child: InkWell(
+          onTap: () => {},
+          child: new Row(
+            children: <Widget>[
+              new Container(
+                width: 80,
+                height: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                        image: NetworkImage(channels[index].thumb))),
               ),
-            ),
-            Align(
-                alignment: Alignment.topRight,
-                child: InkWell(
-                  onTap: () => {
-                    setState(() => {channels.removeAt(index)}),
-                  },
+              /*new Image.network(
+                channels[index].thumb,
+                width: 60,
+                height: 60,
+              ),*/
+              new Padding(padding: EdgeInsets.only(right: 16)),
+              new Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Text(
+                        channels[index].title,
+                        softWrap: true,
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      new Text(
+                        channels[index].id,
+                        softWrap: true,
+                      ),
+                    ]),
+              )),
+              InkWell(
+                onTap: () => {
+                  setState(() => {channels.removeAt(index)}),
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16),
                   child: Icon(
                     Icons.delete,
                     color: Colors.black45,
                   ),
-                )),
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -311,7 +341,7 @@ class _CategoryEditScreenState extends State<CategoryEditScreen> {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ChannelSearchScreen("검색 결과", query)),
+          builder: (context) => ChannelSearchScreen("Search: $query", query)),
     );
 
     print("결과는 : $result");
@@ -407,7 +437,7 @@ class _CategoryEditScreenState extends State<CategoryEditScreen> {
   }
 
   Category categoryData() {
-    Category temp = new Category(categoryName, Colors.teal, channels);
+    Category temp = new Category(categoryName, channels);
     SharedPrefController.addString("testKey", temp.toJson().toString());
     /*temp.name = channelName;
     temp.color = Colors.teal;

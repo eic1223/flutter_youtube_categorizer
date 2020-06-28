@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "https://yt3.ggpht.com/a/AATXAJyPMywRmD62sfK-1CXjwF0YkvrvnmaaHzs4uw=s100-c-k-c0xffffffff-no-rj-mo"));
     channelsSample1.add(new Channel("UCUH2DSbsNUz2sW3kBNn4ibw", "더코딩파파",
         "https://yt3.ggpht.com/a/AATXAJzOLdHngmBM2inMsULvh3X_UVIB5CNOaWuS7g=s100-c-k-c0xffffffff-no-rj-mo"));
-    categories.add(new Category("Flutter", Colors.indigo, channelsSample1));
+    categories.add(new Category("Flutter", channelsSample1));
     //
     channelsSample2.add(new Channel("UCzgxx_DM2Dcb9Y1spb9mUJA", "TWICE",
         "https://yt3.ggpht.com/a/AATXAJyPqlLtvmnqdfcM_DjUC4ezEP3fR5bvIwciZw=s100-c-k-c0xffffffff-no-rj-mo"));
@@ -52,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
         "https://yt3.ggpht.com/a/AATXAJx0HZh4j0rBz9VYVSQ2nTLHq7exr0hKpC_Ckg=s100-c-k-c0xffffffff-no-rj-mo"));
     channelsSample2.add(new Channel("UC3SyT4_WLHzN7JmHQwKQZww", "IU",
         "https://yt3.ggpht.com/a/AATXAJwlhf14vwfayPqC4y9Ig5_a0iiPP6M74edvqQ=s100-c-k-c0xffffffff-no-rj-mo"));
-    categories.add(new Category("K-POP", Colors.deepOrange, channelsSample2));
+    categories.add(new Category("K-POP", channelsSample2));
     //
     channelsSample3.add(new Channel("UC3SyT4_WLHzN7JmHQwKQZww", "IU",
         "https://yt3.ggpht.com/a/AATXAJwlhf14vwfayPqC4y9Ig5_a0iiPP6M74edvqQ=s100-c-k-c0xffffffff-no-rj-mo"));
-    categories.add(new Category("아이유", Colors.pink, channelsSample3));
+    categories.add(new Category("아이유", channelsSample3));
     //
     print("초기 데이터 들어감");
   }
@@ -95,9 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView(
                   children: List.generate(categories.length, (index) {
                     return CategoryButton(
-                      categories[index].name,
-                      categories[index].getChannelIds(),
-                      category: categories[index],
+                      categories[index],
                     );
                   }),
                 ),
@@ -118,8 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
       margin: EdgeInsets.symmetric(vertical: 7.0),
       child: new Column(
         children: <Widget>[
-          CategoryButton(
-              categories[index].name, categories[index].getChannelList()),
+          CategoryButton(categories[index]),
         ],
       ),
     );
@@ -150,8 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
     print("====");*/
 
     setState(() {
-      categories.add(new Category(result.getCategoryName(),
-          result.getCategoryColor(), result.getChannelList()));
+      if (result != null) {
+        categories.add(
+            new Category(result.getCategoryName(), result.getChannelList()));
+      }
     });
   }
 }

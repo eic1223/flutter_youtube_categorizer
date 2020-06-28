@@ -5,25 +5,23 @@ import 'package:flutteryoutubecategorizer/model/channel.dart';
 
 class Category extends ChangeNotifier {
   String name = "";
-  Color color;
+
   List<Channel> _channelList = [];
-  Category(this.name, this.color, this._channelList);
+  Category(this.name, this._channelList);
 
   Category.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        color = json['color'],
         _channelList = json['_channelList'];
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['color'] = this.color;
+
     data['_channelList'] = this._channelList;
     return data;
   }
 
   getCategoryName() => name;
-  getCategoryColor() => color;
   getChannelList() => _channelList;
   getChannelCount() => _channelList.length;
 
@@ -49,15 +47,14 @@ class Category extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addCategory(String name, Color color, List<Channel> channels) {
-    Category(name, color, channels);
+  void addCategory(String name, List<Channel> channels) {
+    Category(name, channels);
     notifyListeners();
   }
 
   void updateCategory(
       String newName, Color newColor, List<Channel> newChannels) {
     name = newName;
-    color = newColor;
     _channelList = [];
     _channelList.addAll(newChannels);
     notifyListeners();

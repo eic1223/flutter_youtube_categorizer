@@ -1,74 +1,155 @@
 import 'package:flutter/material.dart';
 import 'package:flutteryoutubecategorizer/model/category.dart';
+import 'package:flutteryoutubecategorizer/model/channel.dart';
 import 'package:flutteryoutubecategorizer/screen/category_edit_screen.dart';
 import 'package:flutteryoutubecategorizer/screen/video_list_screen.dart';
 
 class CategoryButton extends StatefulWidget {
-  String name;
-  List<String> channelIds;
   Category category;
-  CategoryButton(this.name, this.channelIds, {this.category});
+
+  CategoryButton(this.category);
 
   @override
-  _CategoryButtonState createState() =>
-      _CategoryButtonState(this.name, this.channelIds);
+  _CategoryButtonState createState() => _CategoryButtonState();
 }
 
 class _CategoryButtonState extends State<CategoryButton> {
-  String name;
-  List<String> channelIds;
+  bool isExpanded = false;
+  //List<String> channelIds;
 
-  _CategoryButtonState(this.name, this.channelIds);
+  //_CategoryButtonState();
 
   @override
-  void initState() {
-    print(widget.channelIds);
-  }
+  void initState() {}
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8, top: 4, bottom: 4),
       child: InkWell(
-        //onTap: () => {_showCategoryVideos(context)},
-        onTap: () => {
+        /*onTap: () => {
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => VideoListScreen(widget.category)),
           )
-        },
+        },*/
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: 80,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          height: isExpanded ? 200 : 60,
+          child: Column(
+            mainAxisAlignment:
+                isExpanded ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Text(widget.name,
-                    style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: 20.0),
-                child: InkWell(
-                  onTap: () => {_navigateAndDisplaySelection(context)},
-                  child: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.black38),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(widget.category.getCategoryName(),
+                        style: TextStyle(
+                            fontSize: 24,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                      child: isExpanded
+                          ? Icon(
+                              Icons.keyboard_arrow_up,
+                              color: Colors.white,
+                              size: 50,
+                            )
+                          : Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.white,
+                              size: 50,
+                            ),
                     ),
                   ),
-                ),
+                ],
               ),
+              isExpanded
+                  ? Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            for (Channel i in widget.category.getChannelList())
+                              InkWell(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            VideoListScreen(i)),
+                                  )
+                                },
+                                child: Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      color: Colors.transparent,
+                                    ),
+                                    child: Column(
+                                      children: <Widget>[
+                                        Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      i.getChannelThumb()))),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            i.getChannelTitle(),
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    )),
+                              )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () =>
+                                  {_navigateAndDisplaySelection(context)},
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        width: 2, color: Colors.white),
+                                    color: Colors.transparent),
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Container(),
             ],
           ),
           decoration: BoxDecoration(
@@ -84,26 +165,16 @@ class _CategoryButtonState extends State<CategoryButton> {
     );
   }
 
-  /*_showCategoryVideos(BuildContext context) async {
-    // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
-    // Navigator.pop이 호출된 이후 완료될 것입니다.
-    final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) =>
-              VideoListScreen("카테고리의 영상들", )),
-    );
-
-    print("선택된 채널 Id는 : $result");
-  }*/
-
   // SelectionScreen을 띄우고 navigator.pop으로부터 결과를 기다리는 메서드
   _navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
     // Navigator.pop이 호출된 이후 완료될 것입니다.
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CategoryEditScreen()),
+      MaterialPageRoute(
+          builder: (context) => CategoryEditScreen(
+              widget.category.getCategoryName(),
+              widget.category.getChannelList())),
     );
 
     // 선택 창으로부터 결과 값을 받은 후 프린트

@@ -51,24 +51,49 @@ class _ChannelSearchScreenState extends State<ChannelSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 20,
-          top: 50,
-          right: 20,
-        ),
-        child: Column(
-          children: [
-            buildHeaderWidget(context),
-            Expanded(
-              child: new Container(
-                height: 400,
-                child: ListView.builder(
-                    itemCount: ytResult.length,
-                    itemBuilder: (_, int index) => listItem(index)),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomCenter,
+                colors: [Colors.pink, Colors.blueAccent])),
+        child: SafeArea(
+          child: Column(
+            children: [
+              //buildHeaderWidget(context),
+              Row(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.white),
+                    overflow: TextOverflow.clip,
+                    softWrap: false,
+                  ),
+                ],
               ),
-            ),
-          ],
+              Expanded(
+                child: new Container(
+                  height: 400,
+                  child: ListView.builder(
+                      itemCount: ytResult.length,
+                      itemBuilder: (_, int index) => listItem(index)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

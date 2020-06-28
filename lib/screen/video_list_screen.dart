@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutteryoutubecategorizer/constant_values.dart';
 import 'package:flutteryoutubecategorizer/model/category.dart';
+import 'package:flutteryoutubecategorizer/model/channel.dart';
 import 'package:flutteryoutubecategorizer/screen/category_edit_screen.dart';
 import 'package:youtube_api/youtube_api.dart';
 
 class VideoListScreen extends StatefulWidget {
-  //final List<String> channelIds;
-  final Category originCategory;
+  /*final Category originCategory;
+  VideoListScreen(this.originCategory);*/
 
-  /*VideoListScreen(
-      this.originCategory, this.channelIds);*/
-  VideoListScreen(this.originCategory);
+  final Channel channelToShow;
+  VideoListScreen(this.channelToShow);
 
   @override
   _VideoListScreenState createState() => _VideoListScreenState();
@@ -32,16 +32,10 @@ class _VideoListScreenState extends State<VideoListScreen> {
     maxResults: 5,
   );
   List<YT_API> ytResult = [];
-  List<YT_API> ytResultTotal = [];
 
-  callVideosByChannelId(List<String> channelIds) async {
-    print('callVideosByChannelId() called');
-
-    for (int i = 0; i < channelIds.length; i++) {
-      print(channelIds[i]);
-      ytResult = await ytApi.channel(channelIds[i]);
-      ytResultTotal.addAll(ytResult);
-    }
+  callVideosByChannelId(String channelId) async {
+    print('callVideosByChannelId() : $channelId');
+    ytResult = await ytApi.channel(channelId);
 
     setState(() {
       print(ytResult);
@@ -54,68 +48,68 @@ class _VideoListScreenState extends State<VideoListScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.originCategory.getChannelIds());
-    callVideosByChannelId(widget.originCategory.getChannelIds());
+    print(widget.channelToShow.getChannelId());
+    callVideosByChannelId(widget.channelToShow.getChannelId());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(
-          left: 15,
-          top: 50,
-          right: 15,
-        ),
-        child: Column(
-          children: [
-            buildHeaderWidget(context),
-            Expanded(
-              child: new Container(
-                height: 400,
-                child: ListView.builder(
-                    //itemCount: ytResult.length,
-                    itemCount: ytResultTotal.length,
-                    itemBuilder: (_, int index) => listItem(index)),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildHeaderWidget(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.easeIn,
-          margin: EdgeInsets.only(bottom: 20, left: 10),
-          width: 300,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topRight,
+                end: Alignment.bottomCenter,
+                colors: [Colors.deepOrange, Colors.indigo])),
+        child: SafeArea(
+          child: Column(
             children: [
-              Text(
-                //widget.ui_title,
-                widget.originCategory.name,
-                style: TextStyle(
-                    fontFamily: 'ZillaSlab',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 32,
-                    color: Theme.of(context).primaryColor),
-                overflow: TextOverflow.clip,
-                softWrap: false,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                            size: 30,
+                          ),
+                        )),
+                    Text(
+                      //widget.ui_title,
+                      widget.channelToShow.getChannelTitle(),
+                      style: TextStyle(
+                          fontFamily: 'ZillaSlab',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 32,
+                          color: Colors.white),
+                      overflow: TextOverflow.clip,
+                      softWrap: false,
+                    ),
+                  ],
+                ),
               ),
-              InkWell(
-                  onTap: () => {
-                        _navigateAndDisplaySelection(context),
-                      },
-                  child: Icon(Icons.edit)),
+              Expanded(
+                child: new Container(
+                  height: 400,
+                  child: ListView.builder(
+                      //itemCount: ytResult.length,
+                      itemCount: ytResult.length,
+                      itemBuilder: (_, int index) => listItem(index)),
+                ),
+              ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -142,48 +136,40 @@ class _VideoListScreenState extends State<VideoListScreen> {
   //
 
   Widget listItem(index) {
-    return new Card(
-      child: new Container(
-        margin: EdgeInsets.symmetric(vertical: 6.0),
-        child: InkWell(
-          onTap: () => {
-            /*print(ytResult[index].channelTitle +
-                ", " +
-                ytResult[index].channelId),*/
-            Navigator.pop(context, ytResult[index].channelId),
-          },
-          child: new Row(
-            children: <Widget>[
-              new Image.network(
-                //ytResult[index].thumbnail['default']['url'],
-                ytResultTotal[index].thumbnail['default']['url'],
-              ),
-              new Padding(padding: EdgeInsets.only(right: 20.0)),
-              new Expanded(
-                  child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                    new Text(
-                      //ytResult[index].title,
-                      ytResultTotal[index].title,
-                      softWrap: true,
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    new Padding(padding: EdgeInsets.only(bottom: 1.5)),
-                    new Text(
-                      //ytResult[index].channelTitle,
-                      ytResultTotal[index].channelTitle,
-                      softWrap: true,
-                    ),
-                    /*new Padding(padding: EdgeInsets.only(bottom: 3.0)),
-                    new Text(
-                      //ytResult[index].url,
-                      ytResultTotal[index].url,
-                      softWrap: true,
-                    ),*/
-                  ]))
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+      child: new Card(
+        elevation: 2,
+        child: new Container(
+          margin: EdgeInsets.all(6),
+          child: InkWell(
+            onTap: () => {
+              Navigator.pop(context, ytResult[index].channelId),
+            },
+            child: new Row(
+              children: <Widget>[
+                new Image.network(
+                  ytResult[index].thumbnail['default']['url'],
+                ),
+                new Padding(padding: EdgeInsets.only(right: 20.0)),
+                new Expanded(
+                    child: new Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                      new Text(
+                        ytResult[index].title,
+                        softWrap: true,
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      new Padding(padding: EdgeInsets.only(bottom: 1.5)),
+                      new Text(
+                        ytResult[index].channelTitle,
+                        softWrap: true,
+                      ),
+                    ]))
+              ],
+            ),
           ),
         ),
       ),
@@ -194,20 +180,17 @@ class _VideoListScreenState extends State<VideoListScreen> {
   _navigateAndDisplaySelection(BuildContext context) async {
     // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
     // Navigator.pop이 호출된 이후 완료될 것입니다.
-    final result = await Navigator.push(
+    /*final result = await Navigator.push(
       context,
-      /*MaterialPageRoute(
-          builder: (context) => CategoryEditScreen(),*/
       MaterialPageRoute(
           builder: (context) => CategoryEditScreen(
               originCategoryName: widget.originCategory.name,
-              originCategoryColor: widget.originCategory.color,
               originChannels: widget.originCategory.getChannelList())),
-    );
+    );*/
 
     // 선택 창으로부터 결과 값을 받은 후 프린트
     //print("$result");
-    print("수정된 사항:");
+    /*print("수정된 사항:");
     if (result != null) {
       print(result);
       print(result.getCategoryName());
@@ -216,12 +199,11 @@ class _VideoListScreenState extends State<VideoListScreen> {
       print(result.getChannelCount());
       print(result.getChannelList()[0].getChannelId());
       print(result.getChannelList()[0].getChannelTitle());
-      print(result.getChannelList()[0].getChannelThumb());
+      print(result.getChannelList()[0].getChannelThumb());*/
 
-      setState(() {
+    /*setState(() {
         widget.originCategory.updateCategory(result.getCategoryName(),
             result.getCategoryColor(), result.getChannelList());
-      });
-    }
+      });*/
   }
 }
