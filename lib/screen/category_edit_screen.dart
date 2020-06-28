@@ -84,7 +84,10 @@ class _CategoryEditScreenState extends State<CategoryEditScreen> {
                     ),
                   ),
                   Text(
-                    "NEW CATEGORY",
+                    (widget.originCategoryName == "" ||
+                            widget.originCategoryName == null)
+                        ? "New Category"
+                        : "Edit Category",
                     style: TextStyle(color: Colors.white, fontSize: 28),
                   ),
                 ],
