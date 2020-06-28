@@ -1,16 +1,36 @@
-# flutteryoutubecategorizer
+# youtube_categorizer
 
-A new Flutter application.
+This app is for the people who want to have a control in their life.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+Don't BE CONTROLLED by Youtube Algorithm.
 
-A few resources to get you started if this is your first Flutter project:
+Don't LOOSE your ATTENTION to do important things.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Don't WASTE your TIME to watch not important videos.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+We help you to keep your attention. 
+
+We can do it. 
+
+
+## Quick Started
+
+1. Make category.
+
+2. Add Youtube channels to the category.
+
+3. You can find the videos from the channels that you added.
+
+
+## Use Cases
+
+for language study: 
+
+for programming study: 
+
+for listening music:
+
+ 
+
