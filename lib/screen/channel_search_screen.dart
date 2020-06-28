@@ -65,12 +65,17 @@ class _ChannelSearchScreenState extends State<ChannelSearchScreen> {
               //buildHeaderWidget(context),
               Row(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                      size: 30,
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                   Text(
@@ -99,86 +104,69 @@ class _ChannelSearchScreenState extends State<ChannelSearchScreen> {
     );
   }
 
-  Widget buildHeaderWidget(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        AnimatedContainer(
-          duration: Duration(milliseconds: 200),
-          curve: Curves.easeIn,
-          margin: EdgeInsets.only(top: 8, bottom: 32, left: 10),
-          width: 300,
-          child: Text(
-            widget.title,
-            style: TextStyle(
-                fontFamily: 'ZillaSlab',
-                fontWeight: FontWeight.w700,
-                fontSize: 32,
-                color: Theme.of(context).primaryColor),
-            overflow: TextOverflow.clip,
-            softWrap: false,
-          ),
-        ),
-      ],
-    );
-  }
-
   //
 
   Widget listItem(index) {
-    return new Card(
-      child: new Container(
-        margin: EdgeInsets.symmetric(vertical: 7.0),
-        padding: EdgeInsets.all(12.0),
-        child: InkWell(
-          onTap: () => {
-            print(ytResult[index].channelTitle +
-                ", " +
-                ytResult[index].channelId +
-                ", " +
-                ytResult[index].thumbnail.toString()),
-            SharedPrefController.addString(
-                "selected",
-                ytResult[index].channelTitle +
-                    ", " +
-                    ytResult[index].channelId +
-                    ", " +
-                    ytResult[index].thumbnail.toString()),
-            SharedPrefController.addString("idCh1", ytResult[index].channelId),
-            print("ㄴ저장함."),
-            Navigator.pop(context, {
-              'channelId': ytResult[index].channelId,
-              'channelTitle': ytResult[index].channelTitle,
-              'channelThumb': ytResult[index].thumbnail['default']['url'],
-            }),
-          },
-          child: new Row(
-            children: <Widget>[
-              new Image.network(
-                ytResult[index].thumbnail['default']['url'],
-              ),
-              new Padding(padding: EdgeInsets.only(right: 20.0)),
-              new Expanded(
-                  child: new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                    new Text(
-                      ytResult[index].title,
-                      softWrap: true,
-                      style: TextStyle(fontSize: 18.0),
-                    ),
-                    new Padding(padding: EdgeInsets.only(bottom: 1.5)),
-                    new Text(
-                      ytResult[index].channelTitle,
-                      softWrap: true,
-                    ),
-                    new Padding(padding: EdgeInsets.only(bottom: 3.0)),
-                    new Text(
-                      ytResult[index].url,
-                      softWrap: true,
-                    ),
-                  ]))
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 4, top: 4),
+      child: new Card(
+        child: new Container(
+          padding: EdgeInsets.all(8.0),
+          child: InkWell(
+            onTap: () => {
+              print(ytResult[index].channelTitle +
+                  ", " +
+                  ytResult[index].channelId +
+                  ", " +
+                  ytResult[index].thumbnail.toString()),
+              SharedPrefController.addString(
+                  "selected",
+                  ytResult[index].channelTitle +
+                      ", " +
+                      ytResult[index].channelId +
+                      ", " +
+                      ytResult[index].thumbnail.toString()),
+              SharedPrefController.addString(
+                  "idCh1", ytResult[index].channelId),
+              print("ㄴ저장함."),
+              Navigator.pop(context, {
+                'channelId': ytResult[index].channelId,
+                'channelTitle': ytResult[index].channelTitle,
+                'channelThumb': ytResult[index].thumbnail['default']['url'],
+              }),
+            },
+            child: new Row(
+              children: <Widget>[
+                Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                      //borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                          image: NetworkImage(
+                    ytResult[index].thumbnail['default']['url'],
+                  ))),
+                ),
+                Padding(padding: EdgeInsets.only(right: 20.0)),
+                new Expanded(
+                    child: new Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                      new Text(
+                        ytResult[index].channelTitle,
+                        softWrap: true,
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      new Padding(padding: EdgeInsets.only(bottom: 3.0)),
+                      new Text(
+                        ytResult[index].description,
+                        softWrap: true,
+                        style: TextStyle(fontSize: 14.0),
+                      ),
+                    ]))
+              ],
+            ),
           ),
         ),
       ),

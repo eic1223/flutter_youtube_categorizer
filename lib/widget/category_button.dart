@@ -36,116 +36,92 @@ class _CategoryButtonState extends State<CategoryButton> {
         },*/
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: isExpanded ? 200 : 60,
+          height: isExpanded ? 172 : 68,
           child: Column(
             mainAxisAlignment:
                 isExpanded ? MainAxisAlignment.start : MainAxisAlignment.center,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Text(widget.category.getCategoryName(),
-                        style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          isExpanded = !isExpanded;
-                        });
-                      },
-                      child: isExpanded
-                          ? Icon(
-                              Icons.keyboard_arrow_up,
-                              color: Colors.white,
-                              size: 50,
-                            )
-                          : Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.white,
-                              size: 50,
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(widget.category.getCategoryName(),
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold)),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child:
+                                Text("(${widget.category.getChannelCount()})",
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                    )),
+                          ),
+                          InkWell(
+                            onTap: () =>
+                                {_navigateAndDisplaySelection(context)},
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
                             ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            isExpanded = !isExpanded;
+                          });
+                        },
+                        child: isExpanded
+                            ? Icon(
+                                Icons.keyboard_arrow_up,
+                                color: Colors.white,
+                                size: 50,
+                              )
+                            : Icon(
+                                Icons.keyboard_arrow_down,
+                                color: Colors.white,
+                                size: 50,
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               isExpanded
                   ? Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            for (Channel i in widget.category.getChannelList())
-                              InkWell(
-                                onTap: () => {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            VideoListScreen(i)),
-                                  )
-                                },
-                                child: Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      color: Colors.transparent,
-                                    ),
-                                    child: Column(
-                                      children: <Widget>[
-                                        Container(
-                                          width: 50,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                      i.getChannelThumb()))),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: Text(
-                                            i.getChannelTitle(),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ],
-                                    )),
-                              )
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () =>
-                                  {_navigateAndDisplaySelection(context)},
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        width: 2, color: Colors.white),
-                                    color: Colors.transparent),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                ),
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                            height: 88,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount:
+                                  widget.category.getChannelList().length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ChannelIcon(
+                                    widget.category.getChannelList()[index]);
+                              },
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     )
@@ -180,5 +156,54 @@ class _CategoryButtonState extends State<CategoryButton> {
     // 선택 창으로부터 결과 값을 받은 후 프린트
     //print("$result");
     print("꺼내자 : ");
+  }
+}
+
+class ChannelIcon extends StatelessWidget {
+  ChannelIcon(
+    this.i,
+  );
+
+  final Channel i;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => VideoListScreen(i)),
+        )
+      },
+      child: Container(
+          width: 100,
+          height: 100,
+          decoration: BoxDecoration(
+            color: Colors.transparent,
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                        image: NetworkImage(i.getChannelThumb()))),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  i.getChannelTitle(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          )),
+    );
   }
 }

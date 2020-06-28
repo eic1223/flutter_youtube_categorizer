@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.only(left: 16),
                     child: Text(
                       "CATEGORY",
                       style: TextStyle(
@@ -93,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Expanded(
                 child: ListView(
+                  scrollDirection: Axis.vertical,
                   children: List.generate(categories.length, (index) {
                     return CategoryButton(
                       categories[index],

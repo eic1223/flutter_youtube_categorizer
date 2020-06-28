@@ -2,9 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutteryoutubecategorizer/constant_values.dart';
-import 'package:flutteryoutubecategorizer/model/category.dart';
 import 'package:flutteryoutubecategorizer/model/channel.dart';
-import 'package:flutteryoutubecategorizer/screen/category_edit_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
 
 class VideoListScreen extends StatefulWidget {
@@ -48,7 +47,6 @@ class _VideoListScreenState extends State<VideoListScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.channelToShow.getChannelId());
     callVideosByChannelId(widget.channelToShow.getChannelId());
   }
 
@@ -144,7 +142,10 @@ class _VideoListScreenState extends State<VideoListScreen> {
           margin: EdgeInsets.all(6),
           child: InkWell(
             onTap: () => {
-              Navigator.pop(context, ytResult[index].channelId),
+              //Navigator.pop(context, ytResult[index].channelId),
+
+              print(ytResult[index].url.replaceAll(" ", "")),
+              _launchYoutubeURL(ytResult[index].url.replaceAll(" ", "")),
             },
             child: new Row(
               children: <Widget>[
@@ -174,6 +175,16 @@ class _VideoListScreenState extends State<VideoListScreen> {
         ),
       ),
     );
+  }
+
+  _launchYoutubeURL(String youtubeId) async {
+    String target = youtubeId;
+    if (await canLaunch(target)) {
+      //await launch(target, forceSafariVC: false);
+      await launch(target);
+    } else {
+      throw 'Could not launch $target';
+    }
   }
 
   // SelectionScreen을 띄우고 navigator.pop으로부터 결과를 기다리는 메서드
