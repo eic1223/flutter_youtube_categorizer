@@ -5,6 +5,7 @@ import 'package:flutteryoutubecategorizer/constant_values.dart';
 import 'package:flutteryoutubecategorizer/model/channel.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_api/youtube_api.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class VideoListScreen extends StatefulWidget {
   /*final Category originCategory;
@@ -28,7 +29,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
   YoutubeAPI ytApi = new YoutubeAPI(
     key,
     type: "video",
-    maxResults: 5,
+    maxResults: 10,
   );
   List<YT_API> ytResult = [];
 
@@ -60,7 +61,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
             gradient: LinearGradient(
                 begin: Alignment.topRight,
                 end: Alignment.bottomCenter,
-                colors: [Colors.deepOrange, Colors.indigo])),
+                colors: [Colors.pink, Colors.indigo])),
         child: SafeArea(
           child: Column(
             children: [
@@ -136,36 +137,36 @@ class _VideoListScreenState extends State<VideoListScreen> {
   Widget listItem(index) {
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-      child: new Card(
+      child: Card(
         elevation: 2,
-        child: new Container(
+        child: Container(
+          height: 80,
           margin: EdgeInsets.all(6),
           child: InkWell(
             onTap: () => {
-              //Navigator.pop(context, ytResult[index].channelId),
-
-              print(ytResult[index].url.replaceAll(" ", "")),
+              //print(ytResult[index].url.replaceAll(" ", "")),
               _launchYoutubeURL(ytResult[index].url.replaceAll(" ", "")),
             },
-            child: new Row(
+            child: Row(
               children: <Widget>[
-                new Image.network(
+                Image.network(
                   ytResult[index].thumbnail['default']['url'],
                 ),
-                new Padding(padding: EdgeInsets.only(right: 20.0)),
-                new Expanded(
-                    child: new Column(
+                Padding(padding: EdgeInsets.only(right: 10.0)),
+                Expanded(
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                      new Text(
-                        ytResult[index].title,
+                      Text(
+                        //ytResult[index].title,
+                        HtmlUnescape().convert(ytResult[index].title),
                         softWrap: true,
                         style: TextStyle(fontSize: 16.0),
                       ),
-                      new Padding(padding: EdgeInsets.only(bottom: 1.5)),
-                      new Text(
-                        ytResult[index].channelTitle,
+                      Padding(padding: EdgeInsets.only(bottom: 1.5)),
+                      Text(
+                        ytResult[index].publishedAt.substring(0, 10),
                         softWrap: true,
                       ),
                     ]))

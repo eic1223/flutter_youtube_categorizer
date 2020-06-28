@@ -101,9 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   }),
                 ),
               ),
-              FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () => {_navigateAndDisplaySelection(context)},
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => {_addNewCategory(context)},
+                  ),
+                ),
               ),
             ],
           ),
@@ -123,29 +129,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _navigateAndDisplaySelection(BuildContext context) async {
+  _addNewCategory(BuildContext context) async {
     // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
     // Navigator.pop이 호출된 이후 완료될 것입니다.
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CategoryEditScreen()),
+      MaterialPageRoute(
+          builder: (context) => CategoryEditScreen()), // 파라미터 없이 생
     );
 
-    // 선택 창으로부터 결과 값을 받은 후 프린트
-    /*print("$result");
-    print(result['categoryName']);
-    print(result['channelList']);
-    setState(() {
-      categories.add(new Category(result['categoryName'],
-          result['categoryColor'], result['channelList']));
-      print("ㄴ새 카테고리 생성 완료");
-    });*/
-
-    /*Category loadedData = Category.fromJson(
-        jsonDecode(SharedPrefController.getString("testKey")));
-    print("====");
-    print(loadedData.name);
-    print("====");*/
+    // print(result.getCategoryName());
+    // print(result.getChannelList()[0]);
 
     setState(() {
       if (result != null) {

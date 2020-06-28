@@ -15,25 +15,13 @@ class CategoryButton extends StatefulWidget {
 
 class _CategoryButtonState extends State<CategoryButton> {
   bool isExpanded = false;
-  //List<String> channelIds;
-
-  //_CategoryButtonState();
-
-  @override
-  void initState() {}
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8, top: 4, bottom: 4),
       child: InkWell(
-        /*onTap: () => {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => VideoListScreen(widget.category)),
-          )
-        },*/
+        onTap: () => {},
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: isExpanded ? 172 : 68,
@@ -52,7 +40,7 @@ class _CategoryButtonState extends State<CategoryButton> {
                         children: <Widget>[
                           Text(widget.category.getCategoryName(),
                               style: TextStyle(
-                                  fontSize: 24,
+                                  fontSize: 20,
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold)),
                           Padding(
@@ -60,15 +48,14 @@ class _CategoryButtonState extends State<CategoryButton> {
                             child:
                                 Text("(${widget.category.getChannelCount()})",
                                     style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 20,
                                       color: Colors.white,
                                     )),
                           ),
                           InkWell(
-                            onTap: () =>
-                                {_navigateAndDisplaySelection(context)},
+                            onTap: () => {_editCategory(context)},
                             child: Padding(
-                              padding: const EdgeInsets.all(12.0),
+                              padding: const EdgeInsets.all(8.0),
                               child: Icon(
                                 Icons.edit,
                                 color: Colors.white,
@@ -141,8 +128,7 @@ class _CategoryButtonState extends State<CategoryButton> {
     );
   }
 
-  // SelectionScreen을 띄우고 navigator.pop으로부터 결과를 기다리는 메서드
-  _navigateAndDisplaySelection(BuildContext context) async {
+  _editCategory(BuildContext context) async {
     // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
     // Navigator.pop이 호출된 이후 완료될 것입니다.
     final result = await Navigator.push(
@@ -153,9 +139,14 @@ class _CategoryButtonState extends State<CategoryButton> {
               widget.category.getChannelList())),
     );
 
-    // 선택 창으로부터 결과 값을 받은 후 프린트
     //print("$result");
-    print("꺼내자 : ");
+
+    setState(() {
+      if (result != null) {
+        widget.category
+            .updateCategory(result.getCategoryName(), result.getChannelList());
+      }
+    });
   }
 }
 
@@ -198,7 +189,7 @@ class ChannelIcon extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold),
                 ),
               ),

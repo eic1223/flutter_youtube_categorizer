@@ -52,8 +52,7 @@ class Category extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateCategory(
-      String newName, Color newColor, List<Channel> newChannels) {
+  void updateCategory(String newName, List<Channel> newChannels) {
     name = newName;
     _channelList = [];
     _channelList.addAll(newChannels);
