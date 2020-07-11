@@ -34,31 +34,77 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    setInitialData();
+    setDummyData();
   }
 
-  void setInitialData() {
-    channelsSample1.add(new Channel(
-        "UCwXdFgeE9KYzlDdR7TG9cMw",
-        "Flutter Offical",
-        "https://yt3.ggpht.com/a/AATXAJyPMywRmD62sfK-1CXjwF0YkvrvnmaaHzs4uw=s100-c-k-c0xffffffff-no-rj-mo"));
-    channelsSample1.add(new Channel("UCUH2DSbsNUz2sW3kBNn4ibw", "더코딩파파",
-        "https://yt3.ggpht.com/a/AATXAJzOLdHngmBM2inMsULvh3X_UVIB5CNOaWuS7g=s100-c-k-c0xffffffff-no-rj-mo"));
-    categories.add(new Category("Flutter", channelsSample1));
+  void setDummyData() {
+    Category sampleCat1 = Category("프로그래밍", [
+      Channel("UCwXdFgeE9KYzlDdR7TG9cMw", "Flutter",
+          "https://yt3.ggpht.com/a/AATXAJzNfvJ02vLWy52VQ6UOAuHYnqGCOmsR-3WRCjxM=s176-c-k-c0x00ffffff-no-rj-mo"),
+      Channel("UCVHFbqXqoYvEWM1Ddxl0QDg", "Android Developers",
+          "https://yt3.ggpht.com/a/AATXAJxn7hsXzaDLEJRpzYgfXlcsc4exElXJnT4yBakfsw=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCJm7i4g4z7ZGcJA_HKHLCVw", "The Flutter Way",
+          "https://yt3.ggpht.com/a/AATXAJzEkV2uEs372uXglnQSiNTSUxAV1kBCHhNHk5BI=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UC_Fh8kvtkVPkeihBs42jGcA", "Coding in Flow",
+          "https://yt3.ggpht.com/a/AATXAJxBWgqGrP1UDlTUL4fF9dk2U_s0kfslRpC-TtJzJQ=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCU8Mj6LLoNBXqqeoOD64tFg", "Fun with Flutter",
+          "https://yt3.ggpht.com/a/AATXAJxIfovNRQRcF-2cEZJnjIFOKloJJhhAfMar390m=s100-c-k-c0xffffffff-no-rj-mo"),
+    ]);
+
+    Category sampleCat3 = Category("재밌는 유튜버", [
+      Channel("UC9ZLv1m7QDLv991X1-p50AA", "보물섬",
+          "https://yt3.ggpht.com/a/AATXAJxBWWQO4FcL4fZoFwhAU6FR4Fqd4k3MI_nLCYEy=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCwx6n_4OcLgzAGdty0RWCoA", "워크맨-Workman",
+          "https://yt3.ggpht.com/a/AATXAJw57QrSDhEyMDDqzGegODvbKXGjyFxaHAlE5B_z=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCuq9WVWcsaRqOr3K8E9VkQQ", "조충현",
+          "https://yt3.ggpht.com/a/AATXAJw8eCQtVEV2avsO6DJhobiPSi4E2J4Fm10viFDOOw=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCFsyeRb-ShbdPQ2azhd6-fg", "주호민",
+          "https://yt3.ggpht.com/a/AATXAJyc2ZzXSQRb--trNgQhyjyypkH8kXTOgRM2Xy6LLw=s100-c-k-c0xffffffff-no-rj-mo"),
+    ]);
+
+    Category sampleCat4 = Category("K-POP", [
+      Channel("UCzgxx_DM2Dcb9Y1spb9mUJA", "TWICE",
+          "https://yt3.ggpht.com/a/AATXAJx3UH5xaSZuSe5QcIJAJ7CyflXhedAvodBwgXEd=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel(
+          "UCCRb6nYKaT8tzLA8CwDdUtw",
+          "TWICE JAPAN OFFICIAL YouTube Channel",
+          "https://yt3.ggpht.com/a/AATXAJxlF2Mum42ljacq6XM-ub92gnAE5sgPFcFb-POd5A=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UC-qYkzKFdekoEniRu_FS3zg", "OH MY GIRL",
+          "https://yt3.ggpht.com/a/AATXAJxjBvF7AA6hgOK0I1c2BFDIIHMGQkQNW8vOThZTfA=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCk9GmdlDTBfgGRb7vXeRMoQ", "Red Velvet",
+          "https://yt3.ggpht.com/a/AATXAJw6VykwLbFEYKZtNhSTUckytoMvR-xz9WSARJr2MQ=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCfkXDY7vwkcJ8ddFGz8KusA", "SEVENTEEN",
+          "https://yt3.ggpht.com/a/AATXAJy-u4OZjKzBVHU3aEYEo0IXwGPjO5CaFG7brdxoVg=s100-c-k-c0xffffffff-no-rj-mo"),
+    ]);
+
+    Category sampleCat5 = Category("경제/투자", [
+      Channel("UCsJ6RuBiTVWRX156FVbeaGg", "슈카월드",
+          "https://yt3.ggpht.com/a/AATXAJx63JpAkUWCO_hLzWmp9XPnurI3Hb1ArvTmW62N=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCvAxoPfCKtMcpuEPNjSsY_Q", "빌사남TV",
+          "https://yt3.ggpht.com/a/AATXAJyFRL-WtlgouOnsoXwxAzG1nPaA4LayWiR63sdl6Q=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCaJdckl6MBdDPDf75Ec_bJA", "신사임당",
+          "https://yt3.ggpht.com/a/AATXAJx0Zkz7S5XVAxbjyVToJEOnkrGAC5ijCEhhV-jl8A=s100-c-k-c0xffffffff-no-rj-mo"),
+    ]);
+
+    Category sampleCat6 = Category("홈트", [
+      Channel("UCpg89Ys3E4BaLGgEEWVmI9g", "Thankyou BUBU",
+          "https://yt3.ggpht.com/a/AATXAJwQQVXdrWflFmYRMcebshUdQCnciYqRe961xh6AKw=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UC6vAqaWrNipKV3qVfpttoXw", "알로하써니AlohaSunny",
+          "https://yt3.ggpht.com/a/AATXAJx7TRiaHu68LD_rqCJzQ44iFLUCWOq13An_pC-g=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UC4yq3FWEWqMvFNFBsV3gbKQ", "힙으뜸",
+          "https://yt3.ggpht.com/a/AATXAJxZdZRyqe_OHqpn9XJWjJk5JtPxb7815KZxA4euOQ=s100-c-k-c0xffffffff-no-rj-mo"),
+      Channel("UCKBaqaU8eSc-49MPU1umhkA", "미나홈트",
+          "https://yt3.ggpht.com/a/AATXAJzvHAWHbycgFbSdcNeRWLTL3SugfjyHqm6TgoZxfQ=s100-c-k-c0xffffffff-no-rj-mo"),
+    ]);
+
+    categories.add(sampleCat1);
+    categories.add(sampleCat3);
+    categories.add(sampleCat4);
+    categories.add(sampleCat5);
+    categories.add(sampleCat6);
+
     //
-    channelsSample2.add(new Channel("UCzgxx_DM2Dcb9Y1spb9mUJA", "TWICE",
-        "https://yt3.ggpht.com/a/AATXAJyPqlLtvmnqdfcM_DjUC4ezEP3fR5bvIwciZw=s100-c-k-c0xffffffff-no-rj-mo"));
-    channelsSample2.add(new Channel("UCLkAepWjdylmXSltofFvsYQ", "방탄TV",
-        "https://yt3.ggpht.com/a/AATXAJx0HZh4j0rBz9VYVSQ2nTLHq7exr0hKpC_Ckg=s100-c-k-c0xffffffff-no-rj-mo"));
-    channelsSample2.add(new Channel("UC3SyT4_WLHzN7JmHQwKQZww", "IU",
-        "https://yt3.ggpht.com/a/AATXAJwlhf14vwfayPqC4y9Ig5_a0iiPP6M74edvqQ=s100-c-k-c0xffffffff-no-rj-mo"));
-    categories.add(new Category("K-POP", channelsSample2));
-    //
-    channelsSample3.add(new Channel("UC3SyT4_WLHzN7JmHQwKQZww", "IU",
-        "https://yt3.ggpht.com/a/AATXAJwlhf14vwfayPqC4y9Ig5_a0iiPP6M74edvqQ=s100-c-k-c0xffffffff-no-rj-mo"));
-    categories.add(new Category("아이유", channelsSample3));
-    //
-    print("초기 데이터 들어감");
+    print("샘플 데이터 들어감");
   }
 
   @override
