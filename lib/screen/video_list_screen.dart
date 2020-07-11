@@ -8,11 +8,9 @@ import 'package:youtube_api/youtube_api.dart';
 import 'package:html_unescape/html_unescape.dart';
 
 class VideoListScreen extends StatefulWidget {
-  /*final Category originCategory;
-  VideoListScreen(this.originCategory);*/
-
-  final Channel channelToShow;
-  VideoListScreen(this.channelToShow);
+  final String name;
+  final List<Channel> channelsToShow;
+  VideoListScreen(this.name, this.channelsToShow);
 
   @override
   _VideoListScreenState createState() => _VideoListScreenState();
@@ -33,6 +31,8 @@ class _VideoListScreenState extends State<VideoListScreen> {
   );
   List<YT_API> ytResult = [];
 
+  List<List<YT_API>> ytResultList = [];
+
   callVideosByChannelId(String channelId) async {
     print('callVideosByChannelId() : $channelId');
     ytResult = await ytApi.channel(channelId);
@@ -43,12 +43,39 @@ class _VideoListScreenState extends State<VideoListScreen> {
     });
   }
 
+  callVideosByCategory(List<String> channelIds) async {
+    print("category name");
+
+    for (int i = 0; i < channelIds.length; i++) {
+      ytResultList.add(await ytApi.channel(channelIds[i]));
+    }
+
+    for (List<YT_API> eachResult in ytResultList) {
+      ytResult.addAll(eachResult);
+    }
+
+    ytResult.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
+
+    ytResult.reversed.toList();
+
+    setState(() {
+      print(ytResult);
+      print("callVideosByCategory updated");
+    });
+  }
+
   //
 
   @override
   void initState() {
     super.initState();
-    callVideosByChannelId(widget.channelToShow.getChannelId());
+
+    List<String> channelIds = [];
+    for (Channel channel in widget.channelsToShow) {
+      channelIds.add(channel.getChannelId());
+    }
+
+    callVideosByCategory(channelIds);
   }
 
   @override
@@ -84,7 +111,8 @@ class _VideoListScreenState extends State<VideoListScreen> {
                         )),
                     Text(
                       //widget.ui_title,
-                      widget.channelToShow.getChannelTitle(),
+                      /*widget.channelToShow.getChannelTitle(),*/
+                      widget.name,
                       style: TextStyle(
                           fontFamily: 'ZillaSlab',
                           fontWeight: FontWeight.w700,
@@ -100,7 +128,6 @@ class _VideoListScreenState extends State<VideoListScreen> {
                 child: new Container(
                   height: 400,
                   child: ListView.builder(
-                      //itemCount: ytResult.length,
                       itemCount: ytResult.length,
                       itemBuilder: (_, int index) => listItem(index)),
                 ),
@@ -140,36 +167,55 @@ class _VideoListScreenState extends State<VideoListScreen> {
       child: Card(
         elevation: 2,
         child: Container(
-          height: 80,
+          width: MediaQuery.of(context).size.width,
+          //height: (MediaQuery.of(context).size.width * 9) / 16 + 60,
           margin: EdgeInsets.all(6),
           child: InkWell(
             onTap: () => {
               //print(ytResult[index].url.replaceAll(" ", "")),
               _launchYoutubeURL(ytResult[index].url.replaceAll(" ", "")),
             },
-            child: Row(
+            child: Column(
               children: <Widget>[
-                Image.network(
-                  ytResult[index].thumbnail['default']['url'],
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: (MediaQuery.of(context).size.width * 9) / 16,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: NetworkImage(
+                            ytResult[index].thumbnail['medium']['url'],
+                          ),
+                          fit: BoxFit.cover)),
                 ),
-                Padding(padding: EdgeInsets.only(right: 10.0)),
-                Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
                       Text(
-                        //ytResult[index].title,
-                        HtmlUnescape().convert(ytResult[index].title),
+                        ytResult[index].channelTitle,
                         softWrap: true,
-                        style: TextStyle(fontSize: 16.0),
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Padding(padding: EdgeInsets.only(bottom: 1.5)),
                       Text(
                         ytResult[index].publishedAt.substring(0, 10),
                         softWrap: true,
                       ),
-                    ]))
+                    ],
+                  ),
+                ),
+                Padding(padding: EdgeInsets.only(bottom: 1)),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    //ytResult[index].title,
+                    HtmlUnescape().convert(ytResult[index].title),
+                    softWrap: true,
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

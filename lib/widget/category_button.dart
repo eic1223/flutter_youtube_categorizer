@@ -21,7 +21,15 @@ class _CategoryButtonState extends State<CategoryButton> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8, top: 4, bottom: 4),
       child: InkWell(
-        onTap: () => {},
+        onTap: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VideoListScreen(
+                    widget.category.getCategoryName(),
+                    widget.category.getChannelList())),
+          )
+        },
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: isExpanded ? 172 : 68,
@@ -152,10 +160,10 @@ class _CategoryButtonState extends State<CategoryButton> {
 
 class ChannelIcon extends StatelessWidget {
   ChannelIcon(
-    this.i,
+    this.ch,
   );
 
-  final Channel i;
+  final Channel ch;
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +171,8 @@ class ChannelIcon extends StatelessWidget {
       onTap: () => {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => VideoListScreen(i)),
+          MaterialPageRoute(
+              builder: (context) => VideoListScreen(ch.title, [ch])),
         )
       },
       child: Container(
@@ -180,12 +189,12 @@ class ChannelIcon extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     image: DecorationImage(
-                        image: NetworkImage(i.getChannelThumb()))),
+                        image: NetworkImage(ch.getChannelThumb()))),
               ),
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                  i.getChannelTitle(),
+                  ch.getChannelTitle(),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                       color: Colors.white,
