@@ -27,15 +27,28 @@ class _VideoListScreenState extends State<VideoListScreen> {
   YoutubeAPI ytApi = new YoutubeAPI(
     key,
     type: "video",
-    maxResults: 10,
+    maxResults: 5,
   );
   List<YT_API> ytResult = [];
 
   List<List<YT_API>> ytResultList = [];
 
+  loadMoreVideo() async {
+    List<YT_API> moreYtResult = [];
+    //moreYtResult = await ytApi.nextPage().;
+    //print(moreYtResult);
+
+    print(ytApi.nextPageToken);
+    setState(() {
+      ytResult.addAll(moreYtResult);
+    });
+  }
+
   callVideosByChannelId(String channelId) async {
     print('callVideosByChannelId() : $channelId');
     ytResult = await ytApi.channel(channelId);
+
+//    String token = ytResult.
 
     setState(() {
       print(ytResult);
@@ -127,9 +140,34 @@ class _VideoListScreenState extends State<VideoListScreen> {
               Expanded(
                 child: new Container(
                   height: 400,
-                  child: ListView.builder(
+                  /*child: ListView.builder(
                       itemCount: ytResult.length,
-                      itemBuilder: (_, int index) => listItem(index)),
+                      itemBuilder: (_, int index) => listItem(index)),*/
+                  child: ListView.builder(
+                      itemCount: ytResult.length + 1,
+                      itemBuilder: (_, int index) => index == ytResult.length
+                          ? Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: InkWell(
+                                onTap: () => {loadMoreVideo(), print("더 보기")},
+                                child: Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: Colors.orange,
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    child: Center(
+                                      child: Text(
+                                        "더 보기",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 16),
+                                      ),
+                                    )),
+                              ),
+                            )
+                          : listItem(index)),
                 ),
               ),
             ],
@@ -232,36 +270,5 @@ class _VideoListScreenState extends State<VideoListScreen> {
     } else {
       throw 'Could not launch $target';
     }
-  }
-
-  // SelectionScreen을 띄우고 navigator.pop으로부터 결과를 기다리는 메서드
-  _navigateAndDisplaySelection(BuildContext context) async {
-    // Navigator.push는 Future를 반환합니다. Future는 선택 창에서
-    // Navigator.pop이 호출된 이후 완료될 것입니다.
-    /*final result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => CategoryEditScreen(
-              originCategoryName: widget.originCategory.name,
-              originChannels: widget.originCategory.getChannelList())),
-    );*/
-
-    // 선택 창으로부터 결과 값을 받은 후 프린트
-    //print("$result");
-    /*print("수정된 사항:");
-    if (result != null) {
-      print(result);
-      print(result.getCategoryName());
-      print(result.getCategoryColor());
-      print(result.getChannelList());
-      print(result.getChannelCount());
-      print(result.getChannelList()[0].getChannelId());
-      print(result.getChannelList()[0].getChannelTitle());
-      print(result.getChannelList()[0].getChannelThumb());*/
-
-    /*setState(() {
-        widget.originCategory.updateCategory(result.getCategoryName(),
-            result.getCategoryColor(), result.getChannelList());
-      });*/
   }
 }
